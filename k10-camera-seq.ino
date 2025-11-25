@@ -1,6 +1,3 @@
-//#include <GT30L24A3W.h>
-//#include <unihiker_k10.h>
-
 /******************************************************
 Unihiker K10 time lapse capture sequence of camera images
  to SD card or stream camera to screen.
