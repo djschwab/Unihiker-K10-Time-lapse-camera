@@ -1,3 +1,6 @@
+#include <GT30L24A3W.h>
+#include <unihiker_k10.h>
+
 /******************************************************
 Unihiker K10 time lapse capture sequence of camera images
  to SD card or stream camera to screen.
@@ -66,6 +69,7 @@ uint32_t _jpg_width = NULL; // frame width
 uint32_t _jpg_height = NULL; // frame height
 uint32_t delta_t = 0; // time interval between images
 uint32_t last_t = 0; // time of last image
+uint32_t start_t = 0; // time of first image
 uint32_t img_count = 0; // count of images
 char filename[50]; // filename on SD card
 char buffer[50]; // character buffer
@@ -111,8 +115,7 @@ void setup() {
   }
   // if streaming mode is set, start camera streaming to screen
   if(mode==0){
-    ires=0;
-    k10.initBgCamerImage(ires);
+    k10.initBgCamerImage();
     k10.setBgCamerImage();
   } else {
   // else select resolution for time lapse images
@@ -201,6 +204,7 @@ void setup() {
     btnb=false;
     while(!btna & !btnb){delay (100);}
     tft.fillScreen(TFT_BLACK);
+    start_t=millis();
     delta_t=1000*(3600*hrs+60*mns+sec);
  // }
 
@@ -265,7 +269,7 @@ void loop() {
         file.write(_jpg_buf,_jpg_buf_len);
         file.close();
         tft.setTextColor(TFT_BLUE, TFT_BLACK);
-        sprintf(buffer, "Time: %d     ", millis()/1000);
+        sprintf(buffer, "Time: %d     ", (millis()-start_t)/1000);
         tft.drawString(buffer, 0, 0, 4);
         tft.setTextColor(TFT_GREEN, TFT_BLACK);
         tft.drawString(filename, 0, 35, 4);
