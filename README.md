@@ -5,7 +5,8 @@ The on-screen setup allows for time intervals from 1 second to 99 hours. It also
 - 640x480
 - 800x600
 - 1280x720
-- 1280x1024.
+- 1280x1024
+  
 Although the Unihiker API documentation only allows for 240x320 format images, I found
 that by using the ESP32 API for the camers (esp_camera_init and esp_camera_fb_get), it is possible to capture camera images at higher resolutions.
 For some reason that I can't figure out, the framesize descriptors that generate the different resolutions are not what you would expect.
