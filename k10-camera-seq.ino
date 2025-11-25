@@ -269,7 +269,14 @@ void loop() {
         file.write(_jpg_buf,_jpg_buf_len);
         file.close();
         tft.setTextColor(TFT_BLUE, TFT_BLACK);
-        sprintf(buffer, "Time: %d     ", (millis()-start_t)/1000);
+//        sprintf(buffer, "Time: %d     ", (millis()-start_t)/1000);
+//        tft.drawString(buffer, 0, 0, 4);
+        uint32_t sec = (millis()-start_t)/1000;
+        int hrs = sec/3600;
+        sec = sec-hrs*3600;
+        int mns = sec/60;
+        sec = sec-60*mns;
+        sprintf(buffer, "Time: %02d:%02d:%02d", hrs,mns,sec);
         tft.drawString(buffer, 0, 0, 4);
         tft.setTextColor(TFT_GREEN, TFT_BLACK);
         tft.drawString(filename, 0, 35, 4);
