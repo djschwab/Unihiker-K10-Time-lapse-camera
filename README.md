@@ -1,12 +1,17 @@
 # Unihiker K10 time lapse camera
 This Arduino sketch implements a time lapse camera for the Unihiker K10 ESP32s3 device. It saves photo images in jpg format to the SD card.
-The on-screen setup allows for time intervals from 1 second to 99 hours. It also allows for the images to be captured in 5 different resolutions:
+The on-screen setup allows for time intervals from 1 second to 24 hours. It also allows for the images to be captured in 5 different resolutions:
 - 240x320
 - 640x480
 - 800x600
 - 1280x720
 - 1280x1024
-  
+
+You can select between 'streaming' mode (direct output to the screen display, or time lapse mode (save jpg files to SD cards).
+Use the 'A' button to toggle between selections and the 'B' button to confirm your selection.
+
+Whwn setting the time interval for time lapse mode, use the 'A' button to increment hours, minutes, or seconds, and the 'B' button to lock in your selection.
+ 
 Although the Unihiker API documentation only allows for 240x320 format images, I found
 that by using the ESP32 API for the camera (esp_camera_init and esp_camera_fb_get), it is possible to capture camera images at higher resolutions.
 For some reason that I can't figure out, the framesize descriptors that generate the different resolutions are not what you would expect.
