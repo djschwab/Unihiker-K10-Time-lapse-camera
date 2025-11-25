@@ -1,4 +1,4 @@
-Unihiker K10 time lapse camera
+# Unihiker K10 time lapse camera
 This sketch implements a time lapse camera for the Unihiker K10 ESP32s3 device. It saves photo images in jpg format to the SD card.
 The on-screen setup allows for time intervals from 1 second to 99 hours. It also allows for the images to be captured in 5 different resolutions:
 240x320, 640x480, 800x600, 1280x720, and 1280x1024. Although the Unihiker API documentation only allows for 240x320 format images, I found
