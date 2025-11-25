@@ -10,7 +10,7 @@ The on-screen setup allows for time intervals from 1 second to 24 hours. It also
 You can select between 'streaming' mode (direct output to the screen display, or time lapse mode (save jpg files to SD cards).
 Use the 'A' button to toggle between selections and the 'B' button to confirm your selection.
 
-Whwn setting the time interval for time lapse mode, use the 'A' button to increment hours, minutes, or seconds, and the 'B' button to lock in your selection.
+When setting the time interval for time lapse mode, use the 'A' button to increment hours, minutes, or seconds, and the 'B' button to lock in your selection.
  
 Although the Unihiker API documentation only allows for 240x320 format images, I found
 that by using the ESP32 API for the camera (esp_camera_init and esp_camera_fb_get), it is possible to capture camera images at higher resolutions.
@@ -32,6 +32,6 @@ from the jpg files using ffmpeg:
 
 ffmpeg -framerate 25 -i img%05d.jpg -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p output.mp4
 
-The file output.mp4 is me first attempt at a timelapse movie. I hope I can make some better examples.
+The file output.mp4 is my first attempt at a timelapse movie. I hope I can make some better examples.
 
 Please feel free use and improve this code. I'd appreciate hearing about what you do with it in the **Discussions** section.
