@@ -1,5 +1,5 @@
-#include <GT30L24A3W.h>
-#include <unihiker_k10.h>
+//#include <GT30L24A3W.h>
+//#include <unihiker_k10.h>
 
 /******************************************************
 Unihiker K10 time lapse capture sequence of camera images
@@ -12,6 +12,7 @@ DJS - 11/1/2025
 //#include <SD.h>
 //#include <TFT_eSPI.h> 
 //#include <SPI.h>
+
 #include "unihiker_k10.h"
 UNIHIKER_K10    k10;
 
@@ -34,7 +35,7 @@ void onButtonBPressed();
 #define Y5_GPIO_NUM       9
 #define Y4_GPIO_NUM       11
 #define Y3_GPIO_NUM       10
-#define Y2_GPIO_NUM        8
+#define Y2_GPIO_NUM       8
 #define VSYNC_GPIO_NUM    4
 #define HREF_GPIO_NUM     5
 #define PCLK_GPIO_NUM     17
@@ -150,7 +151,7 @@ void setup() {
     btnb=false;
     while(!btnb){
       if(btna){
-        hrs=(hrs+1)%24;
+        hrs=(hrs+1)%25;    // max 24 hrs
         btna=false;
       }
       sprintf(buffer, "Hours: %d     ", hrs);
@@ -164,7 +165,7 @@ void setup() {
     btnb=false;
     while(!btnb){
       if(btna){
-        mns=(mns+1)%60;
+        mns=(mns+1)%60;     // max 59 mns
         btna=false;
       }
       sprintf(buffer, "Minutes: %d     ", mns);
@@ -178,7 +179,7 @@ void setup() {
     btnb=false;
     while(!btnb){
       if(btna){
-        sec=(sec+1)%60;
+        sec=(sec+1)%60;     // max 59 sec
         btna=false;
       }
       sprintf(buffer, "Seconds: %d     ", sec);
@@ -206,71 +207,81 @@ void setup() {
     tft.fillScreen(TFT_BLACK);
     start_t=millis();
     delta_t=1000*(3600*hrs+60*mns+sec);
- // }
 
-  // Init SD File System
-  SD.begin();
+    // Init SD File System
+    SD.begin();
 
-  camera_config_t config;
-  config.ledc_channel = LEDC_CHANNEL_0;
-  config.ledc_timer = LEDC_TIMER_0;
-  config.pin_d0 = Y2_GPIO_NUM;
-  config.pin_d1 = Y3_GPIO_NUM;
-  config.pin_d2 = Y4_GPIO_NUM;
-  config.pin_d3 = Y5_GPIO_NUM;
-  config.pin_d4 = Y6_GPIO_NUM;
-  config.pin_d5 = Y7_GPIO_NUM;
-  config.pin_d6 = Y8_GPIO_NUM;
-  config.pin_d7 = Y9_GPIO_NUM;
-  config.pin_xclk = XCLK_GPIO_NUM;
-  config.pin_pclk = PCLK_GPIO_NUM;
-  config.pin_vsync = VSYNC_GPIO_NUM;
-  config.pin_href = HREF_GPIO_NUM;
-  config.pin_sscb_sda = SIOD_GPIO_NUM;
-  config.pin_sscb_scl = SIOC_GPIO_NUM;
-  config.pin_pwdn = PWDN_GPIO_NUM;
-  config.pin_reset = RESET_GPIO_NUM;
-  config.xclk_freq_hz = 10000000;
-//  config.pixel_format = PIXFORMAT_JPEG;  // doesn't seem to work 
-//  config.pixel_format = PIXFORMAT_YUV422; 
-  config.pixel_format = PIXFORMAT_RGB565; 
-  config.frame_size = res_index[ires];
-  config.grab_mode = CAMERA_GRAB_LATEST;
-  config.fb_count = 2;
-  
-  // ESP camera init
-  esp_err_t err = esp_camera_init(&config);
-  if (err != ESP_OK) {
-    Serial.printf("Camera init failed with error 0x%x", err);
-    return;
+    // set camera configuration for ESP camera init
+    camera_config_t config;
+    config.ledc_channel = LEDC_CHANNEL_0;
+    config.ledc_timer = LEDC_TIMER_0;
+    config.pin_d0 = Y2_GPIO_NUM;
+    config.pin_d1 = Y3_GPIO_NUM;
+    config.pin_d2 = Y4_GPIO_NUM;
+    config.pin_d3 = Y5_GPIO_NUM;
+    config.pin_d4 = Y6_GPIO_NUM;
+    config.pin_d5 = Y7_GPIO_NUM;
+    config.pin_d6 = Y8_GPIO_NUM;
+    config.pin_d7 = Y9_GPIO_NUM;
+    config.pin_xclk = XCLK_GPIO_NUM;
+    config.pin_pclk = PCLK_GPIO_NUM;
+    config.pin_vsync = VSYNC_GPIO_NUM;
+    config.pin_href = HREF_GPIO_NUM;
+    config.pin_sscb_sda = SIOD_GPIO_NUM;
+    config.pin_sscb_scl = SIOC_GPIO_NUM;
+    config.pin_pwdn = PWDN_GPIO_NUM;
+    config.pin_reset = RESET_GPIO_NUM;
+    config.xclk_freq_hz = 10000000;
+  //  config.pixel_format = PIXFORMAT_JPEG;  // doesn't seem to work 
+  //  config.pixel_format = PIXFORMAT_YUV422; 
+    config.pixel_format = PIXFORMAT_RGB565; 
+    config.frame_size = res_index[ires];
+    config.grab_mode = CAMERA_GRAB_LATEST;
+    config.fb_count = 2;
+    
+    // ESP camera init
+    esp_err_t err = esp_camera_init(&config);
+    if (err != ESP_OK) {
+      Serial.printf("Camera init failed with error 0x%x", err);
+      return;
+    }
+    // set camera sensor settings 
+    sensor_t * s = esp_camera_sensor_get();
+    s->set_hmirror(s, 1);        // 0 = disable , 1 = enable       // required to get colors right
+  // These don't seem to have any effect:
+  //s->set_brightness(s, 1);     // -2 to 2
+  //s->set_contrast(s, -2);       // -2 to 2
+  //s->set_saturation(s, 1);     // -2 to 2
   }
-  sensor_t * s = esp_camera_sensor_get();
-  s->set_hmirror(s, 1);        // 0 = disable , 1 = enable       // required to get colors right
-}
 }
 void loop() {
   // if in streaming mode, do nothing
   if(mode==0){
       delay(1000);
   } else {
+  // if in time lapse, check to see if it's time for a new image
     if(millis()-last_t>delta_t){
+      // get frame buffer
       fb = esp_camera_fb_get();
       if (fb) {
+        // convert to jpg format
         bool jpeg_converted = fmt2jpg(fb->buf, fb->len, fb->width, fb->height,
                     fb->format, 32, &_jpg_buf, &_jpg_buf_len);
         _jpg_width=fb->width;
         _jpg_height=fb->height;
+        // delete frame buffer
         esp_camera_fb_return(fb);
         fb = NULL;
+        // set up file name for jpg
         img_count = img_count+1;
         n=sprintf (filename, "/img%05d.jpg", img_count);
         Serial.printf("Filename: %s\n",filename);
+        // write jpg file to SD
         file = SD.open(filename, FILE_WRITE);
         file.write(_jpg_buf,_jpg_buf_len);
         file.close();
+        // display file name and elapsed time on display
         tft.setTextColor(TFT_BLUE, TFT_BLACK);
-//        sprintf(buffer, "Time: %d     ", (millis()-start_t)/1000);
-//        tft.drawString(buffer, 0, 0, 4);
         uint32_t sec = (millis()-start_t)/1000;
         int hrs = sec/3600;
         sec = sec-hrs*3600;
@@ -280,9 +291,9 @@ void loop() {
         tft.drawString(buffer, 0, 0, 4);
         tft.setTextColor(TFT_GREEN, TFT_BLACK);
         tft.drawString(filename, 0, 35, 4);
-
         Serial.printf(" width: %d height: %d buffer length: %d\n",_jpg_width,_jpg_height,
           (uint32_t)(_jpg_buf_len));
+        // delete jpg buffer
         free(_jpg_buf);
         _jpg_buf = NULL;
       } else {
@@ -290,11 +301,9 @@ void loop() {
       }
       last_t=millis();
     }
-
     delay(1);
   }
 }
-
 void onButtonAPressed(){
   btna=true;
 };
