@@ -22,7 +22,7 @@ to be required for proper operation.
 If anyone knows why the framesize descriptors aren't accurate, or how to implement the rest of the camera's 'sensor' settings, I'd appreciate
 your advice.
 
-Please feel free use and improve this code. I'd appreciate hearing about what you do with it.
+Please feel free use and improve this code. I'd appreciate hearing about what you do with it in the Discussions section.
 
 
 
