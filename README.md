@@ -22,8 +22,6 @@ to be required for proper operation.
 If anyone knows why the framesize descriptors aren't accurate, or how to implement the rest of the camera's 'sensor' settings, I'd appreciate
 your advice.
 
-Please feel free use and improve this code. I'd appreciate hearing about what you do with it in the **Discussions** section.
-
 The file names of the jpg files on the SD card are imgxxxxx.jpg where xxxxx is the sequence number. You can make an animation
 from the jpg files using ffmpeg:
 
@@ -31,3 +29,4 @@ ffmpeg -framerate 25 -i img%05d.jpg -c:v libx264 -profile:v high -crf 20 -pix_fm
 
 The file output.mp4 is me first attempt at a timelapse movie. I hope I can make some better examples.
 
+Please feel free use and improve this code. I'd appreciate hearing about what you do with it in the **Discussions** section.
