@@ -21,11 +21,14 @@ For some reason that I can't figure out, the framesize descriptors that generate
 - FRAMESIZE_SXGA => 1280x720,
 - FRAMESIZE_UXGA => 1280x1024
 
+In addition, I was unsuccessful in using the PIXFORMAT_JPEG configuration for the camera. I had to use PIXFORMAT_RGB565 and then
+convert to jpg format with fmt2jpg().
+
 Also, I was not able to change any of the camera's 'sensor' settings like brightness, contrast, or saturation except for hmirror(), which seems
 to be required for proper operation.
 
-If anyone knows why the framesize descriptors aren't accurate, or how to implement the rest of the camera's 'sensor' settings, I'd appreciate
-your advice.
+If anyone knows why the framesize descriptors aren't accurate, or how to implement the rest of the camera's 'sensor' and PIXFORMAT_JPEG
+settings, I'd appreciate your advice.
 
 The file names of the jpg files on the SD card are imgxxxxx.jpg where xxxxx is the sequence number. You can make an animation
 from the jpg files using ffmpeg:
