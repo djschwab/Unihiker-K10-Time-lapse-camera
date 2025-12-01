@@ -80,8 +80,6 @@ void setup() {
   Serial.begin(115200);
   Serial.println("***Start***");
   k10.begin();
-  k10.buttonA->setPressedCallback(onButtonAPressed);
-  k10.buttonB->setPressedCallback(onButtonBPressed);
   // Init K10 screen - needed for streaming
   k10.initScreen(2);
   // Init eSPI screen handler
@@ -89,6 +87,8 @@ void setup() {
   tft.setRotation(2);
   tft.setTextSize(1);
   tft.fillScreen(TFT_BLACK);
+  k10.buttonA->setPressedCallback(onButtonAPressed);
+  k10.buttonB->setPressedCallback(onButtonBPressed);
   // Select mode
   tft.setTextColor(TFT_BLUE, TFT_BLACK);
   tft.drawString("Select Camera Mode:", 0, 0, 4);
